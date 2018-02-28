@@ -1,0 +1,22 @@
+library("plyr", lib.loc="~/R/win-library/3.4")
+ds1 <-read.table(file.choose(), header = T, sep = ",")
+head(ds1)
+
+attach(ds1)
+ds1x <- ddply(ds1, "Sex", transform, mean.age = mean(Age))
+ds1x2 <- ddply(ds1x, "Sex", transform, mean.grade = mean(Grade))
+grade_2 <- ds1x2$mean.grade
+
+head(ds1x2)
+write.table(ds1x2, "Averages.grade.age", sep=",")
+write(grade_2, "Averages",
+      ncolumns = if(is.character(grade_2)) 1 else 5,
+      append = FALSE, sep = " ")
+write(as.matrix(ds1x2), "Averages.comb", sep = " ")
+gs2 <- subset(ds1, grepl("i", ds1$Name, ignore.case = TRUE))
+gs2
+write.table(gs2, "Names.with.i", sep = ",")
+write(as.matrix(gs2), file = "Namesi", sep = "")
+write(as.matrix(gs2), "Namesi",
+      ncolumns = if(is.character(gs2)) 1 else 5,
+      append = FALSE, sep = " ")
